@@ -1,0 +1,3 @@
+[submodule "open_eng_dict"]
+  path = open_eng_dict
+  url = https://github.com/ahpxex/open-english-dictionary.git

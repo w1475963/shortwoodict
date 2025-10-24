@@ -1,0 +1,26 @@
+name: eng dict build
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  eng_dict_build:
+    name: Eng Dict Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        name: Checkout
+        with:
+          submodules: true
+      - name: Build
+        run: |
+          python eng_dict_build.py
+          sort eng_dict_dist/concise_definition.txt -o eng_dict_dist/concise_definition.txt
+          sort eng_dict_dist/parasynonyms.txt -o eng_dict_dist/parasynonyms.txt
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "ci: auto gen eng_dict"
