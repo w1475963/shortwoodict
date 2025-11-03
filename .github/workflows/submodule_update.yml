@@ -47,6 +47,7 @@ jobs:
           done
 
           # 更新所有子模块
+          git submodule sync
           git submodule update --remote --recursive
 
           # 检查更新并收集有变更的模块名称
