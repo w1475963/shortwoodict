@@ -39,6 +39,7 @@ jobs:
 
           git submodule init
           git submodule sync
+          git submodule update
 
           # 记录当前哈希
           for name in "${names[@]}"; do
