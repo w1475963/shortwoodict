@@ -24,12 +24,11 @@ jobs:
         run: |
           # 提取所有子模块名称
           git submodule init
-          git config --file .gitmodules --get-regexp 'submodule\..*\.path' | \
-          awk '{split($1, a, "."); print a[2]}' | \
-          sort -u > submodule_names.txt
-
-          # 输出子模块名称列表
-          echo "names=$(cat submodule_names.txt | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          git config --file .gitmodules --get-regexp 'submodule\..*\.path' |
+          awk '{split($1, a, "."); print a[2]}' |
+          sort -u |
+          tr '\n' ' ' |
+          xargs -I {} echo "names={}" >> $GITHUB_OUTPUT
 
       - name: Check for updates
         id: check
