@@ -17,13 +17,13 @@ jobs:
       - name: Checkout repository with submodules
         uses: actions/checkout@v5
         with:
-          submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Parse .gitmodules
         id: parse
         run: |
           # 提取所有子模块名称
+          git submodule init
           git config --file .gitmodules --get-regexp 'submodule\..*\.path' | \
           awk '{split($1, a, "."); print a[2]}' | \
           sort -u > submodule_names.txt
@@ -39,28 +39,18 @@ jobs:
           any_updated=false
           updated_modules=""
 
-          for name in "${names[@]}"; do
-            path=$(git config --file .gitmodules --get submodule.$name.path)
-            target_branch=$(git config --file .gitmodules --get submodule.$name.branch)
-
-            if [ -d "$path" ]; then
-              git -C "$path" fetch origin
-              git -C "$path" checkout "$target_branch" 2>/dev/null || \
-              git -C "$path" checkout -b "$target_branch" "origin/$target_branch"
-
-              git -C "$path" pull origin "$target_branch"
-            fi
-          done
-
+          # 记录当前哈希
           for name in "${names[@]}"; do
             path=$(git config --file .gitmodules --get submodule.$name.path)
             hash=$(git -C "$path" rev-parse HEAD)
             before_hashes[$name]=$hash
           done
 
+          # 更新所有子模块
           git submodule sync
           git submodule update --remote --recursive
 
+          # 检查更新并收集有变更的模块名称
           for name in "${names[@]}"; do
             path=$(git config --file .gitmodules --get submodule.$name.path)
             new_hash=$(git -C "$path" rev-parse HEAD)
