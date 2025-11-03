@@ -66,7 +66,11 @@ jobs:
 
           echo "any_updated=$any_updated" >> $GITHUB_OUTPUT
           echo "updated_modules=$updated_modules" >> $GITHUB_OUTPUT
-          echo "Updated modules: $updated_modules"
+          if [[$any_updated == 'true']]; then
+            echo "Updated modules: $updated_modules"
+          else
+            echo "No module updated."
+          fi
 
       - name: push the update
         if: steps.check.outputs.any_updated == 'true'
