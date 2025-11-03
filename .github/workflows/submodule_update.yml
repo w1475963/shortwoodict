@@ -23,7 +23,6 @@ jobs:
         id: parse
         run: |
           # 提取所有子模块名称
-          git submodule init
           git config --file .gitmodules --get-regexp 'submodule\..*\.path' |
           awk '{split($1, a, "."); print a[2]}' |
           sort -u |
@@ -37,6 +36,8 @@ jobs:
           declare -A before_hashes
           any_updated=false
           updated_modules=""
+
+          git submodule init
 
           # 记录当前哈希
           for name in "${names[@]}"; do
