@@ -65,7 +65,13 @@ jobs:
           echo "updated_modules=$updated_modules" >> $GITHUB_OUTPUT
           echo "Updated modules: $updated_modules"
 
-  trigger_specific_workflow:
+      - name: push the update
+        if: steps.check.outputs.any_updated == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "ci: auto update sub-modules"
+
+  eng_dict_build:
     needs: check-submodules
     # if: needs.check-submodules.outputs.any_updated == 'true'
     if: contains(needs.check-submodules.outputs.updated_modules, '{{open_eng_dict}}')
