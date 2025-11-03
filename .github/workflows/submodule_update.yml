@@ -3,7 +3,7 @@ name: Submodule Auto Sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 8,18 * * *" # 2 am / 4 pm (shanghai)
+    - cron: "0 10 * * *" # 4 am (shanghai)
 
 jobs:
   check-submodules:
