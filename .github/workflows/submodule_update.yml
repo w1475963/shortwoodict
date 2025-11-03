@@ -57,6 +57,7 @@ jobs:
             updated=$([[ "${before_hashes[$name]}" != "$new_hash" ]] && echo "true" || echo "false")
 
             if $updated; then
+          echo "updated : ${before_hashes[$name]} -> $new_hash"
               any_updated=true
               updated_modules+="{{$name}} "
             fi
