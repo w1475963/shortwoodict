@@ -44,6 +44,7 @@ jobs:
             target_branch=$(git config --file .gitmodules --get submodule.$name.branch)
 
             if [ -d "$path" ]; then
+              git -C "$path" fetch origin
               git -C "$path" checkout "$target_branch" 2>/dev/null || \
               git -C "$path" checkout -b "$target_branch" "origin/$target_branch"
 
